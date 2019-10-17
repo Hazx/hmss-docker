@@ -1,0 +1,22 @@
+{
+    "listen": ":45000",
+    "target": "KCP_TARGET",
+    "key": "KCP_PWD",
+    "crypt": "KCP_CR",
+    "mode": "KCP_MODE",
+    "mtu": KCP_MTU,
+    "sndwnd": KCP_SW,
+    "rcvwnd": KCP_RW,
+    "datashard": KCP_DS,
+    "parityshard": KCP_PS,
+    "dscp": 46,
+    "nocomp": false,
+    "acknodelay": false,
+    "nodelay": 0,
+    "interval": 40,
+    "resend": 0,
+    "nc": 0,
+    "sockbuf": 4194304,
+    "keepalive": 10,
+    "log": "/dev/null"
+}
