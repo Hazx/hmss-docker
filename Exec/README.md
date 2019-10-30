@@ -17,7 +17,7 @@ KCPTUN (2) | 45001 | udp
 
 ## 构建镜像前的准备工作
 
-　　拷贝编译好的ss-server并更名为hmss，拷贝kcptun客户端server_linux_amd64并更名为hmkcp。
+　　拷贝编译好的 ss-server 并更名为 hmss ，拷贝 kcptun 客户端 server_linux_amd64 并更名为 hmkcp 。
 
 ## 构建镜像
 ```

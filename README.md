@@ -14,6 +14,6 @@ docker pull hazx/hmss:TAG
 
 
 ## 目录
-- Source: 这是最原始的制作目录，使用的是 Shadowsocks 和 KCPTUN 的源码进行编译，最终打包成 Docker 镜像。但是镜像体积会比较大。
+- Source: 这是最原始的制作目录，使用的是 Shadowsocks 的源码进行编译，最终打包成 Docker 镜像。但是镜像体积会比较大。
 - Exec: 这是提取了编译好的程序后重新打包制作的目录，Docker Hub 上的镜像就是基于这个目录制作的，体积较 Source 目录制作的镜像会小很多。
 
