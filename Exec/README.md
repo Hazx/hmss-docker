@@ -17,7 +17,7 @@ KCPTUN (2) | 45001 | udp
 
 ## 构建镜像前的准备工作
 
-　　将已编译好的ss-server、kcp-server拷贝至目录下，并分别改名为hmss、hmkcp
+　　拷贝编译好的ss-server并更名为hmss，拷贝kcptun客户端server_linux_amd64并更名为hmkcp。
 
 ## 构建镜像
 ```
@@ -27,7 +27,7 @@ docker build -t 新镜像名称 .
 
 ## 启动镜像
 ```shell
-docker run -itd -p SS端口:35000 -p SS端口:35000/udp -p KCP端口:45000/udp -p KCP端口2:45001/udp --name 名称 -e SS_PWD="密码" --restart unless-stopped hazx/hmss:1.6.1
+docker run -itd -p SS端口:35000 -p SS端口:35000/udp -p KCP端口:45000/udp -p KCP端口2:45001/udp --name 容器名称 -e SS_PWD="密码" --restart unless-stopped hazx/hmss:1.6.1
 ```
 默认情况下会启动一个SS和两个KCP服务端，共监听3个端口（其中SS端口是同一个端口号、两个协议），可按需开启和配置。
 
