@@ -9,14 +9,15 @@
     "rcvwnd": KCP_RW,
     "datashard": KCP_DS,
     "parityshard": KCP_PS,
-    "dscp": 46,
+    "dscp": KCP_SDSCP,
     "nocomp": false,
     "acknodelay": false,
     "nodelay": 0,
     "interval": 40,
     "resend": 0,
     "nc": 0,
-    "sockbuf": 4194304,
+    "sockbuf": KCP_BUF,
     "keepalive": 10,
-    "log": "/dev/null"
+    "log": "/root/hmss/kcp.log",
+    "quiet": true
 }

@@ -3,5 +3,6 @@
     "server_port":35000,
     "password":"SS_PWD",
     "method":"SS_CR",
-    "timeout":SS_TIME
+    "timeout":SS_TIME,
+    "mtu":SS_MTU
 }

@@ -1,14 +1,51 @@
 #!/bin/bash
 
-# 默认配置
-if [ ! -n "${KCP2_ON}" ];then
-    echo "[INFO] No KCP2_ON configured. Default KCP2_ON=true"
-    KCP2_ON=true
+# 配置冲突
+if [[ ${SS_ONLY} == true ]] && [[ ${KCP_ONLY} == true ]];then
+    echo "[ERROR] SS_ONLY and KCP_ONLY cannot be set to true at the same time!"
+    exit 1
 fi
-if [ ! -n "${KCP_ONLY}" ];then
-    echo "[INFO] No KCP_ONLY configured. Default KCP_ONLY=false"
+if [[ ${SS_ONLY} == true ]] && [[ ${KCP2_ON} == true ]];then
+    echo "[ERROR] SS_ONLY and KCP2_ON cannot be set to true at the same time!"
+    exit 1
+fi
+
+# 默认配置
+if [ ! -n "${SS_ONLY}" ] && [ ! -n "${KCP_ONLY}" ];then
+    echo "[INFO] No SS_ONLY configured. The default parameters are being used."
+    echo "===> SS_ONLY=false"
+    echo ""
+    SS_ONLY=false
+    echo "[INFO] No KCP_ONLY configured. The default parameters are being used."
+    echo "===> KCP_ONLY=false"
+    echo ""
     KCP_ONLY=false
 fi
+if [ ! -n "${KCP_ONLY}" ];then
+    echo "[INFO] No KCP_ONLY configured. The default parameters are being used."
+    echo "===> KCP_ONLY=false"
+    echo ""
+    KCP_ONLY=false
+fi
+if [ ! -n "${SS_ONLY}" ] && [[ ${KCP_ONLY} == true ]];then
+    echo "[INFO] No SS_ONLY configured. The default parameters are being used."
+    echo "===> SS_ONLY=false"
+    echo ""
+    SS_ONLY=false
+fi
+if [[ ${SS_ONLY} == true ]];then
+    echo "[INFO] SS_ONLY==true configured. The KCP2_ON auto set false."
+    echo "===> KCP2_ON=false"
+    echo ""
+    KCP2_ON=false
+fi
+if [ ! -n "${KCP2_ON}" ];then
+    echo "[INFO] No KCP2_ON configured. Default KCP2_ON=true"
+    echo "===> KCP2_ON=true"
+    echo ""
+    KCP2_ON=true
+fi
+
 
 
 # 调整配置文件
@@ -29,6 +66,10 @@ sed -i "s/SS_CR/${SS_CR:-"chacha20-ietf-poly1305"}/g" /root/hmss/hmss.json
 
 # SS超时时间
 sed -i "s/SS_TIME/${SS_TIME:-"60"}/g" /root/hmss/hmss.json
+
+# SS MTU
+sed -i "s/SS_MTU/${SS_MTU:-"1450"}/g" /root/hmss/hmss.json
+
 
 # KCP密码
 if [ ! -n "${KCP_PWD}" ];then
@@ -76,6 +117,14 @@ sed -i "s/KCP_DS/${KCP_DS:-"10"}/g" /root/hmss/kcp2.json
 sed -i "s/KCP_PS/${KCP_PS:-"3"}/g" /root/hmss/kcp.json
 sed -i "s/KCP_PS/${KCP_PS:-"3"}/g" /root/hmss/kcp2.json
 
+# KCP DSCP
+sed -i "s/KCP_SDSCP/${KCP_SDSCP:-"46"}/g" /root/hmss/kcp.json
+sed -i "s/KCP_SDSCP/${KCP_SDSCP:-"46"}/g" /root/hmss/kcp2.json
+
+# KCP Socket缓冲
+sed -i "s/KCP_BUF/${KCP_BUF:-"4194304"}/g" /root/hmss/kcp.json
+sed -i "s/KCP_BUF/${KCP_BUF:-"4194304"}/g" /root/hmss/kcp2.json
+
 
 
 # 启动SS
@@ -84,24 +133,39 @@ if [[ ${KCP_ONLY} == false ]];then
     if [[ $? != 0 ]];then
         echo "[ERROR] SS cannot start. Please check container's environment variables."
         exit 1
+    else
+        echo "[INFO] HMSS Running..."
+        echo ""
     fi
 fi
 
 # 启动KCP
-if [[ ${KCP2_ON} == true ]];then
+if [[ ${SS_ONLY} == false ]];then
     /root/hmss/hmkcp -c /root/hmss/kcp.json 2>&1 &
-else
-    /root/hmss/hmkcp -c /root/hmss/kcp.json 2>&1
-fi
-if [[ $? != 0 ]];then
-    echo "[ERROR] KCP cannot start. Please check container's environment variables."
-    exit 1
-fi
-if [[ ${KCP2_ON} == true ]];then
-    /root/hmss/hmkcp -c /root/hmss/kcp2.json 2>&1
     if [[ $? != 0 ]];then
         echo "[ERROR] KCP cannot start. Please check container's environment variables."
         exit 1
+    else
+        sleep 3
+        echo "[INFO] HMKCP Running..."
+        echo ""
+        cat /root/hmss/kcp.log
+        echo ""
+    fi
+    if [[ ${KCP2_ON} == true ]];then
+        /root/hmss/hmkcp -c /root/hmss/kcp2.json 2>&1 &
+        if [[ $? != 0 ]];then
+            echo "[ERROR] KCP cannot start. Please check container's environment variables."
+            exit 1
+        else
+            sleep 3
+            echo "[INFO] HMKCP2 Running..."
+            echo ""
+            cat /root/hmss/kcp2.log
+            echo ""
+        fi
     fi
 fi
 
+# 容器保活
+/root/hmss/keep

@@ -1,13 +1,13 @@
 FROM centos:7.6.1810
 
 LABEL maintainer="hazx632823367@gmail.com"
-LABEL Version="1.6.1"
+LABEL Version="1.6.2"
 
 COPY  * /root/hmss/
 
 RUN yum install -y epel-release &&\
     yum install -y libev-devel c-ares-devel libsodium-devel mbedtls-devel &&\
-    chmod a+x /root/hmss/start.sh /root/hmss/hmss /root/hmss/hmkcp &&\
+    chmod a+x /root/hmss/start.sh /root/hmss/hmss /root/hmss/hmkcp /root/hmss/keep &&\
     yum clean all &&\
     rm -rf /var/cache/yum
 
