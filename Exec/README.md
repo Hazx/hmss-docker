@@ -27,7 +27,7 @@ docker build -t 新镜像名称 .
 
 ## 启动镜像
 ```shell
-docker run -d -p SS端口:35000 -p SS端口:35000/udp -p KCP端口:45000/udp -p KCP端口2:45001/udp --name 容器名称 -e SS_PWD="密码" --restart unless-stopped hazx/hmss:1.6.1
+docker run -d -p SS端口:35000 -p SS端口:35000/udp -p KCP端口:45000/udp -p KCP端口2:45001/udp --name 容器名称 -e SS_PWD="密码" --restart unless-stopped hazx/hmss:1.6.2
 ```
 默认情况下会启动一个SS和两个KCP服务端，共监听3个端口（其中SS端口是同一个端口号、两个协议），可按需开启和配置。
 
