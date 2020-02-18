@@ -1,7 +1,7 @@
 FROM centos:7.6.1810
 
 LABEL maintainer="hazx632823367@gmail.com"
-LABEL Version="1.6.2"
+LABEL Version="1.7"
 
 COPY  * /root/hmss/
 

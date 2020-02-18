@@ -1,7 +1,7 @@
 FROM centos:7.6.1810
 
 LABEL maintainer="hazx632823367@gmail.com"
-LABEL Version="1.6.2"
+LABEL Version="1.7"
 
 COPY  * /root/hmss/
 
@@ -10,8 +10,8 @@ RUN yum install -y epel-release ;\
     cd /root/hmss ;\
     gcc keep.c -o keep ;\
     rm -fr keep.c ;\
-    tar zxvf shadowsocks-libev-3.3.1.tar.gz ;\
-    cd shadowsocks-libev-3.3.1 ;\
+    tar zxvf shadowsocks-libev-3.3.4.tar.gz ;\
+    cd shadowsocks-libev-3.3.4 ;\
     ./configure --prefix="/root/hmss/ssexe" ;\
     make ;\
     make install ;\
@@ -19,7 +19,7 @@ RUN yum install -y epel-release ;\
     cd /root/hmss ;\
     rm -fr shadowsocks* ;\
     rm -fr ssexe ;\
-    tar zxvf kcptun-linux-amd64-20190910.tar.gz ;\
+    tar zxvf kcptun-linux-amd64-20200201.tar.gz ;\
     mv server_linux_amd64 hmkcp ;\
     rm -fr kcptun* client* ;\
     chmod a+x /root/hmss/start.sh /root/hmss/hmss /root/hmss/hmkcp /root/hmss/keep ;\
