@@ -1,7 +1,7 @@
-# hmss-1.7
+# hmss-1.8
 ### 服务端版本
 - shadowsocks: 3.3.4
-- kcptun: 20200201
+- kcptun: 20200701
 
 
 ### 内部监听端口
@@ -16,7 +16,7 @@ KCPTUN (2) | 45001 | UDP
 
 ### 启动镜像
 ```shell
-docker run -d -p SS端口:35000 -p SS端口:35000/udp -p KCP端口:45000/udp -p KCP端口2:45001/udp --name 容器名称 -e SS_PWD="密码" hazx/hmss:1.7
+docker run -d -p SS端口:35000 -p SS端口:35000/udp -p KCP端口:45000/udp -p KCP端口2:45001/udp --name 容器名称 -e SS_PWD="密码" hazx/hmss:1.8
 ```
 默认情况下会启动一个SS和两个KCP服务端，共监听3个端口（其中SS端口是同一个端口号、两个协议），可按需开启和配置。
 

@@ -1,11 +1,13 @@
-FROM centos:7.6.1810
+FROM centos:7.8.2003
 
 LABEL maintainer="hazx632823367@gmail.com"
-LABEL Version="1.7"
+LABEL Version="1.8"
 
 COPY  * /root/hmss/
 
-RUN yum install -y epel-release ;\
+RUN yum install wget -y ;\
+    wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo ;\
+    yum makecache -y ;\
     yum install -y gcc gettext autoconf libtool automake make pcre-devel asciidoc xmlto c-ares-devel libev-devel libsodium-devel mbedtls-devel ;\
     cd /root/hmss ;\
     gcc keep.c -o keep ;\
@@ -19,11 +21,11 @@ RUN yum install -y epel-release ;\
     cd /root/hmss ;\
     rm -fr shadowsocks* ;\
     rm -fr ssexe ;\
-    tar zxvf kcptun-linux-amd64-20200201.tar.gz ;\
+    tar zxvf kcptun-linux-amd64-20200701.tar.gz ;\
     mv server_linux_amd64 hmkcp ;\
     rm -fr kcptun* client* ;\
     chmod a+x /root/hmss/start.sh /root/hmss/hmss /root/hmss/hmkcp /root/hmss/keep ;\
-    yum remove -y gcc autoconf automake make ;\
+    yum remove -y gcc autoconf automake make wget ;\
     yum clean all ;\
     rm -rf /var/cache/yum
 
