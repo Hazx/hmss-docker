@@ -10,14 +10,10 @@
     "datashard": KCP_DS,
     "parityshard": KCP_PS,
     "dscp": KCP_SDSCP,
-    "nocomp": false,
-    "acknodelay": false,
-    "nodelay": 0,
-    "interval": 40,
-    "resend": 0,
-    "nc": 0,
+    "nocomp": KCP_NCP,
     "sockbuf": KCP_BUF,
-    "keepalive": 10,
+    "keepalive": KCP_KAL,
+    "tcp": KCP_TCP,
     "log": "/root/hmss/kcp.log",
     "quiet": true
 }

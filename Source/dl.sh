@@ -1,2 +1,2 @@
-wget -4 https://github.com/shadowsocks/shadowsocks-libev/releases/download/v3.3.4/shadowsocks-libev-3.3.4.tar.gz
-wget -4 https://github.com/xtaci/kcptun/releases/download/20200701/kcptun-linux-amd64-20200701.tar.gz
+wget -4 https://github.com/shadowsocks/shadowsocks-libev/releases/download/v3.3.5/shadowsocks-libev-3.3.5.tar.gz
+wget -4 https://github.com/xtaci/kcptun/releases/download/20201126/kcptun-linux-amd64-20201126.tar.gz

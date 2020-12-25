@@ -50,14 +50,16 @@ fi
 
 # 调整配置文件
 # SS密码
-if [[ ${KCP_ONLY} == true ]];then
-    SS_PWD="KCP_ONLY"
-elif [ ! -n "${SS_PWD}" ];then
-    echo "[ERROR] No SS password configured. Please check container's environment variables."
-    exit 1
-elif [[ ${SS_PWD} == "" ]];then
-    echo "[ERROR] No SS password configured. Please check container's environment variables."
-    exit 1
+if [ ! -n "${SS_PWD}" ] || [[ ${SS_PWD} == "" ]];then
+    if [[ ${KCP_ONLY} == true ]];then
+        if [ ! -n "${KCP_PWD}" ] || [[ ${KCP_PWD} == "" ]];then
+            echo "[ERROR] KCP_ONLY Mode: No KCP or SS password configured. Please check container's environment variables."
+            exit 1
+        fi
+    else
+        echo "[ERROR] No SS password configured. Please check container's environment variables."
+        exit 1
+    fi
 fi
 sed -i "s/SS_PWD/$SS_PWD/g" /root/hmss/hmss.json
 
@@ -65,20 +67,18 @@ sed -i "s/SS_PWD/$SS_PWD/g" /root/hmss/hmss.json
 sed -i "s/SS_CR/${SS_CR:-"chacha20-ietf-poly1305"}/g" /root/hmss/hmss.json
 
 # SS超时时间
-sed -i "s/SS_TIME/${SS_TIME:-"60"}/g" /root/hmss/hmss.json
+sed -i "s/SS_TIME/${SS_TIME:-"600"}/g" /root/hmss/hmss.json
 
 # SS MTU
 sed -i "s/SS_MTU/${SS_MTU:-"1450"}/g" /root/hmss/hmss.json
 
 
 # KCP密码
-if [ ! -n "${KCP_PWD}" ];then
+if [ ! -n "${KCP_PWD}" ] || [[ ${KCP_PWD} == "" ]];then
+    echo "[INFO] No KCP password configured. Set KCP Password by SS password."
     sed -i "s/KCP_PWD/$SS_PWD/g" /root/hmss/kcp.json
     sed -i "s/KCP_PWD/$SS_PWD/g" /root/hmss/kcp2.json
 else
-    if [[ ${KCP_PWD} == "" ]];then
-        KCP_PWD=$SS_PWD
-    fi
     sed -i "s/KCP_PWD/$KCP_PWD/g" /root/hmss/kcp.json
     sed -i "s/KCP_PWD/$KCP_PWD/g" /root/hmss/kcp2.json
 fi
@@ -125,6 +125,18 @@ sed -i "s/KCP_SDSCP/${KCP_SDSCP:-"46"}/g" /root/hmss/kcp2.json
 sed -i "s/KCP_BUF/${KCP_BUF:-"4194304"}/g" /root/hmss/kcp.json
 sed -i "s/KCP_BUF/${KCP_BUF:-"4194304"}/g" /root/hmss/kcp2.json
 
+# KCP 禁用压缩
+sed -i "s/KCP_NCP/${KCP_NCP:-"false"}/g" /root/hmss/kcp.json
+sed -i "s/KCP_NCP/${KCP_NCP:-"false"}/g" /root/hmss/kcp2.json
+
+# KCP 心跳时间
+sed -i "s/KCP_KAL/${KCP_KAL:-"10"}/g" /root/hmss/kcp.json
+sed -i "s/KCP_KAL/${KCP_KAL:-"10"}/g" /root/hmss/kcp2.json
+
+# KCP 模拟TCP连接
+sed -i "s/KCP_TCP/${KCP_TCP:-"false"}/g" /root/hmss/kcp.json
+sed -i "s/KCP_TCP/${KCP_TCP:-"false"}/g" /root/hmss/kcp2.json
+
 
 
 # 启动SS
@@ -148,7 +160,6 @@ if [[ ${SS_ONLY} == false ]];then
     else
         sleep 3
         echo "[INFO] HMKCP Running..."
-        echo ""
         cat /root/hmss/kcp.log
         echo ""
     fi
@@ -160,7 +171,6 @@ if [[ ${SS_ONLY} == false ]];then
         else
             sleep 3
             echo "[INFO] HMKCP2 Running..."
-            echo ""
             cat /root/hmss/kcp2.log
             echo ""
         fi
