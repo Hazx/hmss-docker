@@ -1,0 +1,10 @@
+{
+    "server":"0.0.0.0",
+    "server_port":35000,
+    "password":"SS_PWD",
+    "method":"SS_CR",
+    "plugin": "hmob",
+    "plugin_opts": "obfs=tls",
+    "plugin_args": "SS_PLG_ATGS",
+    "timeout":SS_TIME
+}

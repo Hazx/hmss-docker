@@ -1,0 +1,72 @@
+#!/bin/bash
+
+## 更换 yum 源
+sed -e 's|^mirrorlist=|#mirrorlist=|g' \
+    -e 's|^#baseurl=http://mirror.centos.org|baseurl=https://mirrors.bfsu.edu.cn|g' \
+    -i /etc/yum.repos.d/CentOS-*.repo
+yum makecache
+yum install epel-release -y
+sed -e 's!^metalink=!#metalink=!g' \
+    -e 's!^#baseurl=!baseurl=!g' \
+    -e 's!//download\.fedoraproject\.org/pub!//mirrors.bfsu.edu.cn!g' \
+    -e 's!//download\.example/pub!//mirrors.bfsu.edu.cn!g' \
+    -e 's!http://mirrors!https://mirrors!g' \
+    -i /etc/yum.repos.d/epel*.repo
+yum makecache fast
+
+## 安装编译阶段所需组件
+yum install -y gcc gettext autoconf libtool automake make \
+    pcre-devel asciidoc xmlto c-ares-devel libev-devel \
+    libsodium-devel mbedtls-devel zlib-devel openssl-devel \
+    unzip
+
+## 编译容器保活程序
+cd /root/hmss
+gcc keep.c -o keep
+chmod a+x keep
+rm -f keep.c
+
+## 编译 shadowsocks
+cd /root/hmss
+tar zxvf shadowsocks-libev-3.3.5.tar.gz
+cd shadowsocks-libev-3.3.5
+./configure --prefix="/root/hmss/ssexe"
+make
+make install
+mv /root/hmss/ssexe/bin/ss-server /root/hmss/hmss
+chmod a+x /root/hmss/hmss
+rm -fr /root/hmss/shadowsocks*
+rm -fr /root/hmss/ssexe
+
+## 编译 simple-obfs
+cd /root/hmss
+unzip simple-obfs-20190817.zip
+unzip libcork-simple-obfs-20180916.zip
+rm -fr simple-obfs-master/libcork
+mv libcork-simple-obfs simple-obfs-master/libcork
+cd simple-obfs-master
+./autogen.sh
+./configure --prefix="/root/hmss/obfs"
+make
+make install
+mv /root/hmss/obfs/bin/obfs-server /root/hmss/hmob
+chmod a+x /root/hmss/hmob
+rm -fr /root/hmss/simple-obfs-*
+rm -fr /root/hmss/obfs
+
+## 解压 kcptun
+cd /root/hmss
+tar zxvf kcptun-linux-amd64-20221015.tar.gz
+mv server_linux_amd64 hmkcp
+chmod a+x /root/hmss/hmkcp
+rm -fr kcptun*
+rm -f client*
+
+echo "build finishied."
+
+
+
+
+
+
+

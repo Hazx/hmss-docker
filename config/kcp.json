@@ -1,0 +1,19 @@
+{
+    "listen": ":45000",
+    "target": "KCP_TARGET",
+    "key": "KCP_PWD",
+    "crypt": "KCP_CR",
+    "mode": "KCP_MODE",
+    "mtu": KCP_MTU,
+    "sndwnd": KCP_SW,
+    "rcvwnd": KCP_RW,
+    "datashard": KCP_DS,
+    "parityshard": KCP_PS,
+    "dscp": KCP_SDSCP,
+    "nocomp": KCP_NCP,
+    "sockbuf": KCP_BUF,
+    "keepalive": KCP_KAL,
+    "tcp": KCP_TCP,
+    "log": "/root/hmss/kcp.log",
+    "quiet": true
+}
